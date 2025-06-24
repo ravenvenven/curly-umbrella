@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Produk Digital - Ebook Store Indonesia</title>
+  <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/1163/1163661.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#2563eb',
+            secondary: '#10b981',
+            accent: '#f59e0b',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+    
+    * {
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      scroll-behavior: smooth;
+      background-color: #f8fafc;
+    }
+    
+    .product-card {
+      transition: all 0.3s ease;
+      overflow: hidden;
+    }
+    
+    .product-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+    
+    .discount-badge {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      animation: pulse 2s infinite;
+      font-size: 12px;
+    }
+    
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+    
+    .sale-timer {
+      background: linear-gradient(135deg, #f59e0b, #ef4444);
+      animation: timerGlow 2s infinite alternate;
+    }
+    
+    @keyframes timerGlow {
+      0% { box-shadow: 0 0 5px rgba(245, 158, 11, 0.5); }
+      100% { box-shadow: 0 0 20px rgba(245, 158, 11, 0.8); }
+    }
+    
+    /* Styling untuk filter dan sidebar */
+    .filter-sidebar {
+      transition: all 0.3s ease;
+    }
+    
+    .filter-toggle {
+      display: none;
+    }
+    
+    .category-item {
+      transition: all 0.2s;
+    }
+    
+    .category-item:hover, .category-item.active {
+      background-color: #eff6ff;
+      color: #2563eb;
+    }
+    
+    .price-slider {
+      -webkit-appearance: none;
+      height: 6px;
+      border-radius: 5px;
+      background: #d1d5db;
+      outline: none;
+    }
+    
+    .price-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #2563eb;
+      cursor: pointer;
+    }
+    
+    @media (max-width: 768px) {
+      .filter-sidebar {
+        position: fixed;
+        top: 0;
+        left: -100%;
+        width: 80%;
+        max-width: 320px;
+        height: 100vh;
+        background: white;
+        z-index: 1000;
+        box-shadow: 5px 0 15px rgba(0,0,0,0.1);
+        padding: 20px;
+        overflow-y: auto;
+      }
+      
+      .filter-sidebar.active {
+        left: 0;
+      }
+      
+      .filter-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.5);
+        z-index: 999;
+        display: none;
+      }
+      
+      .filter-overlay.active {
+        display: block;
+      }
+      
+      .filter-toggle {
+        display: block;
+      }
+    }
+    
+    .payment-method {
+      display: flex;
+      align-items: center;
+      padding: 15px;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .payment-method:hover, .payment-method.selected {
+      border-color: #2563eb;
+      background-color: #f0f7ff;
+    }
+    
+    .payment-method.selected {
+      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.3);
+    }
+    
+    .payment-details {
+      display: none;
+      padding: 15px;
+      background: #f9fafb;
+      border-radius: 10px;
+      margin-top: 10px;
+      border: 1px solid #e5e7eb;
+    }
+    
+    .payment-detail {
+      display: flex;
+      align-items: center;
+      padding: 10px;
+      background: white;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      border: 1px solid #e5e7eb;
+    }
+    
+    .payment-detail:last-child {
+      margin-bottom: 0;
+    }
+    
+    .payment-logo {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f3f4f6;
+      border-radius: 8px;
+      margin-right: 15px;
+    }
+    
+    .purchase-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    
+    .modal-content {
+      background: white;
+      border-radius: 15px;
+      width: 90%;
+      max-width: 500px;
+      transform: translateY(20px);
+      transition: transform 0.3s ease;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    
+    .purchase-modal.show {
+      display: flex;
+      opacity: 1;
+    }
+    
+    .purchase-modal.show .modal-content {
+      transform: translateY(0);
+    }
+    
+    .modal-header {
+      background: linear-gradient(to right, #2563eb, #1d4ed8);
+      color: white;
+      border-top-left-radius: 15px;
+      border-top-right-radius: 15px;
+      padding: 20px;
+      position: relative;
+    }
+    
+    .close-modal {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    
+    .close-modal:hover {
+      background: rgba(255,255,255,0.3);
+    }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+  <!-- Header -->
+  <header class="bg-white shadow-md sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+      <div class="flex items-center">
+        <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center mr-3">
+          <i class="fas fa-book text-white text-xl"></i>
+        </div>
+        <h1 class="text-xl md:text-2xl font-bold text-primary">EbookStore<span class="text-secondary">ID</span></h1>
+      </div>
+    </header>
+   <!-- Menu Mobile -->
+   <div class="mobile-menu" id="mobileMenu">
+    <div class="px-6 py-4">
+      <a href="index.html" class="block py-3 px-4 rounded-lg hover:bg-gray-100 font-medium">Beranda</a>
+      <a href="produk.html" class="block py-3 px-4 rounded-lg hover:bg-gray-100 font-medium">Produk</a>
+      <div class="py-3 px-4">
+        <button class="flex items-center justify-between w-full font-medium">
+          <span>Kategori</span>
+          <i class="fas fa-chevron-down text-xs"></i>
+        </button>
+        <div class="mt-2 pl-4 hidden" id="mobileSubmenu">
+          <a href="#" class="block py-2 hover:bg-gray-100">Ebook Bisnis</a>
+          <a href="#" class="block py-2 hover:bg-gray-100">Website Siap Pakai</a>
+          <a href="#" class="block py-2 hover:bg-gray-100">Paket Kombo</a>
+          <a href="#" class="block py-2 hover:bg-gray-100">Template Website</a>
+        </div>
+      </div>
+      <a href="testimoni.html" class="block py-3 px-4 rounded-lg hover:bg-gray-100 font-medium">Testimoni</a>
+      <a href="faq.html" class="block py-3 px-4 rounded-lg hover:bg-gray-100 font-medium">FAQ</a>
+      <a href="kontak.html" class="block py-3 px-4 rounded-lg bg-primary text-white font-semibold mt-4 text-center">
+        Kontak Kami
+      </a>
+    </div>
+  </div>
+  
+  <div class="menu-overlay" id="menuOverlay"></div>
+
+  <!-- Breadcrumb -->
+
+          <li aria-current="page">
+            <div class="flex items-center">
+              <i class="fas fa-chevron-right text-gray-400 mx-2"></i>
+              <span class="text-primary font-medium">Semua Produk</span>
+            </div>
+          </li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="max-w-7xl mx-auto px-4 py-8">
+    <div class="flex flex-col md:flex-row gap-8">
+      <!-- Sidebar Filter -->
+      <div class="filter-sidebar md:w-1/4 bg-white rounded-lg shadow p-6 h-fit md:sticky top-24">
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-xl font-bold text-gray-800">Filter Produk</h2>
+          <button id="closeFilter" class="md:hidden text-gray-500 hover:text-gray-700">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        
+        <!-- Kategori -->
+        <div class="mb-8">
+          <h3 class="font-bold text-gray-800 mb-4">Kategori</h3>
+          <ul class="space-y-2">
+            <li>
+              <a href="#" class="category-item active block py-2 px-4 rounded-lg font-medium">
+                <i class="fas fa-folder mr-2"></i> Semua Produk
+              </a>
+            </li>
+            <li>
+              <a href="#" class="category-item block py-2 px-4 rounded-lg font-medium">
+                <i class="fas fa-book mr-2"></i> Ebook Bisnis
+              </a>
+            </li>
+            <li>
+              <a href="#" class="category-item block py-2 px-4 rounded-lg font-medium">
+                <i class="fas fa-globe mr-2"></i> Website Siap Pakai
+              </a>
+            </li>
+            <li>
+              <a href="#" class="category-item block py-2 px-4 rounded-lg font-medium">
+                <i class="fas fa-box mr-2"></i> Paket Kombo
+              </a>
+            </li>
+            <li>
+              <a href="#" class="category-item block py-2 px-4 rounded-lg font-medium">
+                <i class="fas fa-paint-brush mr-2"></i> Template Website
+              </a>
+            </li>
+            <li>
+              <a href="#" class="category-item block py-2 px-4 rounded-lg font-medium">
+                <i class="fas fa-graduation-cap mr-2"></i> Kursus Online
+              </a>
+            </li>
+          </ul>
+        </div>
+        
+        <!-- Rentang Harga -->
+        <div class="mb-8">
+          <h3 class="font-bold text-gray-800 mb-4">Rentang Harga</h3>
+          <div class="mb-4">
+            <input type="range" min="0" max="500000" value="300000" class="price-slider w-full" id="priceRange">
+          </div>
+          <div class="flex justify-between text-sm text-gray-600">
+            <span>Rp0</span>
+            <span>Rp500.000</span>
+          </div>
+          <div class="mt-4 text-center">
+            <span class="bg-primary text-white py-1 px-3 rounded-full text-sm font-bold" id="priceValue">Hingga Rp300.000</span>
+          </div>
+        </div>
+        
+        <!-- Rating -->
+        <div class="mb-8">
+          <h3 class="font-bold text-gray-800 mb-4">Rating</h3>
+          <ul class="space-y-2">
+            <li>
+              <a href="#" class="flex items-center py-2 px-4 rounded-lg hover:bg-gray-100">
+                <div class="flex text-yellow-400">
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                </div>
+                <span class="ml-2 text-sm text-gray-600">(4.8+)</span>
+              </a>
+            </li>
+            <li>
+              <a href="#" class="flex items-center py-2 px-4 rounded-lg hover:bg-gray-100">
+                <div class="flex text-yellow-400">
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="far fa-star"></i>
+                </div>
+                <span class="ml-2 text-sm text-gray-600">(4.0+)</span>
+              </a>
+            </li>
+            <li>
+              <a href="#" class="flex items-center py-2 px-4 rounded-lg hover:bg-gray-100">
+                <div class="flex text-yellow-400">
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="far fa-star"></i>
+                  <i class="far fa-star"></i>
+                </div>
+                <span class="ml-2 text-sm text-gray-600">(3.0+)</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+        
+        <!-- Tombol Reset -->
+        <button class="w-full bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium py-2 rounded-lg transition duration-300">
+          <i class="fas fa-redo mr-2"></i> Reset Filter
+        </button>
+      </div>
+      
+      <!-- Filter Overlay (Mobile) -->
+      <div class="filter-overlay" id="filterOverlay"></div>
+      
+      <!-- Konten Utama -->
+      <div class="md:w-3/4">
+        <!-- Header Produk -->
+        <div class="bg-white rounded-lg shadow p-6 mb-6">
+          <div class="flex flex-col md:flex-row justify-between items-start md:items-center">
+            <div>
+              <h1 class="text-2xl font-bold text-gray-800 mb-2">Semua Produk Digital</h1>
+              <p class="text-gray-600">Temukan ebook dan website premium untuk kesuksesan bisnis Anda</p>
+            </div>
+            <div class="flex items-center mt-4 md:mt-0">
+              <button id="filterToggle" class="filter-toggle mr-4 bg-primary text-white p-2 rounded-lg">
+                <i class="fas fa-filter"></i>
+              </button>
+              <div class="flex items-center">
+                <span class="text-gray-700 mr-2">Urutkan:</span>
+                <select class="border rounded-lg p-2 focus:ring-primary focus:border-primary">
+                  <option>Terbaru</option>
+                  <option>Harga Terendah</option>
+                  <option>Harga Tertinggi</option>
+                  <option>Rating Tertinggi</option>
+                  <option>Terlaris</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Sale Banner -->
+        <div class="bg-gradient-to-r from-accent to-amber-400 rounded-lg shadow p-6 mb-6 text-white">
+          <div class="flex flex-col md:flex-row items-center justify-between">
+            <div class="flex items-center mb-4 md:mb-0">
+              <i class="fas fa-fire-alt text-2xl mr-3"></i>
+              <div>
+                <h2 class="text-xl font-bold">PROMO SPESIAL HARI INI!</h2>
+                <p class="text-sm">Diskon hingga 50% untuk produk pilihan</p>
+              </div>
+            </div>
+            <button class="bg-white text-accent font-bold py-2 px-6 rounded-lg hover:bg-gray-100 transition duration-300">
+              Lihat Promo
+            </button>
+          </div>
+        </div>
+        
+        <!-- Produk Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- Product 1 -->
+          <div class="product-card bg-white rounded-xl shadow-md overflow-hidden" data-category="bundle" data-price="199000" data-popularity="5">
+            <div class="relative">
+              <img src="https://ebookstoreindonesia.com/wp-content/uploads/2024/03/produk1.jpg" class="w-full h-56 object-cover">
+              <div class="discount-badge bg-accent text-white font-bold py-1 px-3 rounded-full">
+                DISKON 35%
+              </div>
+            </div>
+            <div class="p-5">
+              <div class="flex justify-between items-start">
+                <h3 class="text-lg font-bold text-gray-800">Paket Ebook + Website</h3>
+                <span class="bg-blue-100 text-primary text-xs font-semibold px-2 py-1 rounded">BESTSELLER</span>
+              </div>
+              <p class="text-sm text-gray-600 mt-1">Solusi lengkap untuk memulai bisnis digital Anda</p>
+              
+              <div class="flex items-center mt-3">
+                <div class="flex text-yellow-400">
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star-half-alt"></i>
+                </div>
+                <span class="ml-2 text-sm text-gray-600">(128 review)</span>
+              </div>
+              
+              <div class="mt-4 flex items-end">
+                <p class="text-primary font-bold text-xl">Rp199.000</p>
+                <p class="text-gray-500 text-sm line-through ml-2">Rp299.000</p>
+              </div>
+              
+              <div class="mt-5 flex gap-3">
+                <button class="btn-buy flex-1 bg-primary hover:bg-blue-700 text-white text-center py-2 rounded-lg transition duration-300 flex items-center justify-center" 
+                        data-product="Paket Ebook + Website" 
+                        data-price="199000"
+                        data-discount="35"
+                        data-image="https://ebookstoreindonesia.com/wp-content/uploads/2024/03/produk1.jpg">
+                  <i class="fas fa-shopping-cart mr-2"></i> Beli Sekarang
+                </button>
+                <button class="w-10 h-10 flex items-center justify-center border border-gray-300 rounded-lg hover:bg-gray-100">
+                  <i class="far fa-heart text-gray-600"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Product 2 -->
+          <div class="product-card bg-white rounded-xl shadow-md overflow-hidden" data-category="ebook" data-price="99000" data-popularity="4">
+            <div class="relative">
+              <img src="https://ebookstoreindonesia.com/wp-content/uploads/2024/03/produk2.jpg" class="w-full h-56 object-cover">
+            </div>
+            <div class="p-5">
+              <div class="flex justify-between items-start">
+                <h3 class="text-lg font-bold text-gray-800">Ebook Jualan Laris</h3>
+                <span class="bg-green-100 text-secondary text-xs font-semibold px-2 py-1 rounded">TERBARU</span>
+              </div>
+              <p class="text-sm text-gray-600 mt-1">Strategi penjualan online yang terbukti meningkatkan omzet</p>
+              
+              <div class="flex items-center mt-3">
+                <div class="flex text-yellow-400">
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="far fa-star"></i>
+                </div>
+                <span class="ml-2 text-sm text-gray-600">(87 review)</span>
+              </div>
+              
+              <div class="mt-4">
+                <p class="text-primary font-bold text-xl">Rp99.000</p>
+              </div>
+              
+              <div class="mt-5 flex gap-3">
+                <button class="btn-buy flex-1 bg-primary hover:bg-blue-700 text-white text-center py-2 rounded-lg transition duration-300 flex items-center justify-center"
+                        data-product="Ebook Jualan Laris" 
+                        data-price="99000"
+                        data-discount="0"
+                        data-image="https://ebookstoreindonesia.com/wp-content/uploads/2024/03/produk2.jpg">
+                  <i class="fas fa-shopping-cart mr-2"></i> Beli Sekarang
+                </button>
+                <button class="w-10 h-10 flex items-center justify-center border border-gray-300 rounded-lg hover:bg-gray-100">
+                  <i class="far fa-heart text-gray-600"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Product 3 -->
+          <div class="product-card bg-white rounded-xl shadow-md overflow-hidden" data-category="website" data-price="299000" data-popularity="4">
+            <div class="relative">
+              <img src="https://ebookstoreindonesia.com/wp-content/uploads/2024/03/produk3.jpg" class="w-full h-56 object-cover">
+              <div class="discount-badge bg-accent text-white font-bold py-1 px-3 rounded-full">
+                DISKON 20%
+              </div>
+            </div>
+            <div class="p-5">
+              <h3 class="text-lg font-bold text-gray-800">Website Siap Pakai</h3>
+              <p class="text-sm text-gray-600 mt-1">Website profesional untuk bisnis Anda dengan desain modern</p>
+              
+              <div class="flex items-center mt-3">
+                <div class="flex text-yellow-400">
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                </div>
+                <span class="ml-2 text-sm text-gray-600">(64 review)</span>
+              </div>
+              
+              <div class="mt-4 flex items-end">
+                <p class="text-primary font-bold text-xl">Rp299.000</p>
+                <p class="text-gray-500 text-sm line-through ml-2">Rp349.000</p>
+              </div>
+              
+              <div class="mt-5 flex gap-3">
+                <button class="btn-buy flex-1 bg-primary hover:bg-blue-700 text-white text-center py-2 rounded-lg transition duration-300 flex items-center justify-center"
+                        data-product="Website Siap Pakai" 
+                        data-price="299000"
+                        data-discount="20"
+                        data-image="https://ebookstoreindonesia.com/wp-content/uploads/2024/03/produk3.jpg">
+                  <i class="fas fa-shopping-cart mr-2"></i> Beli Sekarang
+                </button>
+                <button class="w-10 h-10 flex items-center justify-center border border-gray-300 rounded-lg hover:bg-gray-100">
+                  <i class="far fa-heart text-gray-600"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Product 4 -->
+          <div class="product-card bg-white rounded-xl shadow-md overflow-hidden" data-category="bundle" data-price="249000" data-popularity="4">
+            <div class="relative">
+              <img src="https://images.unsplash.com/photo-1497636577773-f1231844b336?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" class="w-full h-56 object-cover">
+              <div class="discount-badge bg-accent text-white font-bold py-1 px-3 rounded-full">
+                DISKON 30%
+              </div>
+            </div>
+            <div class="p-5">
+              <h3 class="text-lg font-bold text-gray-800">Paket Digital Marketing</h3>
+              <p class="text-sm text-gray-600 mt-1">Ebook + Template + Video Tutorial lengkap</p>
+              
+              <div class="flex items-center mt-3">
+                <div class="flex text-yellow-400">
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="far fa-star"></i>
+                </div>
+                <span class="ml-2 text-sm text-gray-600">(42 review)</span>
+              </div>
+              
+              <div class="mt-4 flex items-end">
+                <p class="text-primary font-bold text-xl">Rp249.000</p>
+                <p class="text-gray-500 text-sm line-through ml-2">Rp349.000</p>
+              </div>
+              
+              <div class="mt-5 flex gap-3">
+                <button class="btn-buy flex-1 bg-primary hover:bg-blue-700 text-white text-center py-2 rounded-lg transition duration-300 flex items-center justify-center"
+                        data-product="Paket Digital Marketing" 
+                        data-price="249000"
+                        data-discount="30"
+                        data-image="https://images.unsplash.com/photo-1497636577773-f1231844b336?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80">
+                  <i class="fas fa-shopping-cart mr-2"></i> Beli Sekarang
+                </button>
+                <button class="w-10 h-10 flex items-center justify-center border border-gray-300 rounded-lg hover:bg-gray-100">
+                  <i class="far fa-heart text-gray-600"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Product 5 -->
+          <div class="product-card bg-white rounded-xl shadow-md overflow-hidden" data-category="template" data-price="149000" data-popularity="3">
+            <div class="relative">
+              <img src="https://images.unsplash.com/photo-1551650975-87deedd944c3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" class="w-full h-56 object-cover">
+            </div>
+            <div class="p-5">
+              <h3 class="text-lg font-bold text-gray-800">Template Toko Online</h3>
+              <p class="text-sm text-gray-600 mt-1">Template website toko online siap pakai</p>
+              
+              <div class="flex items-center mt-3">
+                <div class="flex text-yellow-400">
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star-half-alt"></i>
+                  <i class="far fa-star"></i>
+                </div>
+                <span class="ml-2 text-sm text-gray-600">(35 review)</span>
+              </div>
+              
+              <div class="mt-4">
+                <p class="text-primary font-bold text-xl">Rp149.000</p>
+              </div>
+              
+              <div class="mt-5 flex gap-3">
+                <button class="btn-buy flex-1 bg-primary hover:bg-blue-700 text-white text-center py-2 rounded-lg transition duration-300 flex items-center justify-center"
+                        data-product="Template Toko Online" 
+                        data-price="149000"
+                        data-discount="0"
+                        data-image="https://images.unsplash.com/photo-1551650975-87deedd944c3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80">
+                  <i class="fas fa-shopping-cart mr-2"></i> Beli Sekarang
+                </button>
+                <button class="w-10 h-10 flex items-center justify-center border border-gray-300 rounded-lg hover:bg-gray-100">
+                  <i class="far fa-heart text-gray-600"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Product 6 -->
+          <div class="product-card bg-white rounded-xl shadow-md overflow-hidden" data-category="ebook" data-price="129000" data-popularity="4">
+            <div class="relative">
+              <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" class="w-full h-56 object-cover">
+              <div class="discount-badge bg-accent text-white font-bold py-1 px-3 rounded-full">
+                DISKON 25%
+              </div>
+            </div>
+            <div class="p-5">
+              <h3 class="text-lg font-bold text-gray-800">Ebook Master Facebook Ads</h3>
+              <p class="text-sm text-gray-600 mt-1">Panduan lengkap iklan Facebook untuk pemula</p>
+              
+              <div class="flex items-center mt-3">
+                <div class="flex text-yellow-400">
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star-half-alt"></i>
+                </div>
+                <span class="ml-2 text-sm text-gray-600">(56 review)</span>
+              </div>
+              
+              <div class="mt-4 flex items-end">
+                <p class="text-primary font-bold text-xl">Rp129.000</p>
+                <p class="text-gray-500 text-sm line-through ml-2">Rp169.000</p>
+              </div>
+              
+              <div class="mt-5 flex gap-3">
+                <button class="btn-buy flex-1 bg-primary hover:bg-blue-700 text-white text-center py-2 rounded-lg transition duration-300 flex items-center justify-center"
+                        data-product="Ebook Master Facebook Ads" 
+                        data-price="129000"
+                        data-discount="25"
+                        data-image="https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80">
+                  <i class="fas fa-shopping-cart mr-2"></i> Beli Sekarang
+                </button>
+                <button class="w-10 h-10 flex items-center justify-center border border-gray-300 rounded-lg hover:bg-gray-100">
+                  <i class="far fa-heart text-gray-600"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Pagination -->
+        <div class="mt-10 flex justify-center">
+          <nav class="inline-flex rounded-md shadow">
+            <a href="#" class="py-2 px-4 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100">
+              <i class="fas fa-chevron-left"></i>
+            </a>
+            <a href="#" class="py-2 px-4 bg-white border-t border-b border-gray-300 hover:bg-gray-100">1</a>
+            <a href="#" class="py-2 px-4 bg-primary text-white border border-primary">2</a>
+            <a href="#" class="py-2 px-4 bg-white border-t border-b border-gray-300 hover:bg-gray-100">3</a>
+            <a href="#" class="py-2 px-4 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100">
+              <i class="fas fa-chevron-right"></i>
+            </a>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Pembelian -->
+  <div class="purchase-modal" id="purchaseModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="text-xl font-bold">Proses Pembelian</h3>
+        <p class="mt-1">Selesaikan pembelian produk Anda</p>
+        <div class="close-modal" id="closeModal">
+          <i class="fas fa-times"></i>
+        </div>
+      </div>
+      
+      <div class="p-6">
+        <div class="step-indicator">
+          <div class="step active">1</div>
+          <div class="step-line"></div>
+          <div class="step">2</div>
+          <div class="step-line"></div>
+          <div class="step">3</div>
+        </div>
+        
+        <div class="flex flex-col sm:flex-row items-center mb-6">
+          <img id="modalProductImage" src="" class="w-16 h-16 object-cover rounded-lg mr-0 sm:mr-4 mb-3 sm:mb-0">
+          <div class="text-center sm:text-left">
+            <h4 class="font-bold text-lg" id="modalProductName"></h4>
+            <div class="flex flex-col sm:flex-row items-center mt-1">
+              <span class="text-primary font-bold text-xl" id="modalProductPrice"></span>
+              <span class="text-gray-500 text-sm line-through ml-0 sm:ml-2" id="modalProductOldPrice"></span>
+              <span class="ml-0 sm:ml-3 mt-1 sm:mt-0 bg-red-100 text-red-700 py-1 px-2 rounded text-xs font-bold" id="modalDiscountBadge"></span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="mb-6">
+          <label class="block text-gray-700 mb-2 font-medium">Metode Pembayaran</label>
+          
+          <div class="payment-method" data-method="bank">
+            <div class="mr-3">
+              <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                <i class="fas fa-university text-blue-600"></i>
+              </div>
+            </div>
+            <div>
+              <h5 class="font-bold">Transfer Bank</h5>
+              <p class="text-sm text-gray-600">BCA, BRI, Mandiri, BNI</p>
+            </div>
+          </div>
+          
+          <div class="payment-method" data-method="ewallet">
+            <div class="mr-3">
+              <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                <i class="fas fa-wallet text-green-600"></i>
+              </div>
+            </div>
+            <div>
+              <h5 class="font-bold">E-Wallet</h5>
+              <p class="text-sm text-gray-600">OVO, Gopay, Dana, ShopeePay</p>
+            </div>
+          </div>
+          
+          <div class="payment-method" data-method="credit">
+            <div class="mr-3">
+              <div class="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
+                <i class="fas fa-credit-card text-purple-600"></i>
+              </div>
+            </div>
+            <div>
+              <h5 class="font-bold">Kartu Kredit/Debit</h5>
+              <p class="text-sm text-gray-600">Visa, Mastercard, JCB</p>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Bank Transfer Details -->
+        <div class="payment-details" id="bankDetails">
+          <h5 class="font-bold mb-3">Rekening Pembayaran</h5>
+          
+          <div class="payment-detail">
+            <div class="payment-logo bg-blue-50">
+              <i class="fas fa-university text-blue-600"></i>
+            </div>
+            <div>
+              <div class="font-bold">BCA</div>
+              <div class="text-lg font-mono">1234 5678 9012 3456</div>
+              <div class="text-sm text-gray-600">a.n. Ebook Store Indonesia</div>
+            </div>
+          </div>
+          
+          <div class="payment-detail">
+            <div class="payment-logo bg-green-50">
+              <i class="fas fa-university text-green-600"></i>
+            </div>
+            <div>
+              <div class="font-bold">BRI</div>
+              <div class="text-lg font-mono">4567 8901 2345 6789</div>
+              <div class="text-sm text-gray-600">a.n. Ebook Store Indonesia</div>
+            </div>
+          </div>
+          
+          <div class="payment-detail">
+            <div class="payment-logo bg-red-50">
+              <i class="fas fa-university text-red-600"></i>
+            </div>
+            <div>
+              <div class="font-bold">Mandiri</div>
+              <div class="text-lg font-mono">7890 1234 5678 9012</div>
+              <div class="text-sm text-gray-600">a.n. Ebook Store Indonesia</div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- E-Wallet Details -->
+        <div class="payment-details" id="ewalletDetails">
+          <h5 class="font-bold mb-3">Akun E-Wallet</h5>
+          
+          <div class="payment-detail">
+            <div class="payment-logo bg-purple-50">
+              <i class="fab fa-cc-paypal text-purple-600"></i>
+            </div>
+            <div>
+              <div class="font-bold">OVO</div>
+              <div class="text-lg font-mono">0812 3456 7890</div>
+              <div class="text-sm text-gray-600">a.n. Ebook Store Indonesia</div>
+            </div>
+          </div>
+          
+          <div class="payment-detail">
+            <div class="payment-logo bg-green-50">
+              <i class="fab fa-google-pay text-green-600"></i>
+            </div>
+            <div>
+              <div class="font-bold">Gopay</div>
+              <div class="text-lg font-mono">0812 3456 7890</div>
+              <div class="text-sm text-gray-600">a.n. Ebook Store Indonesia</div>
+            </div>
+          </div>
+          
+          <div class="payment-detail">
+            <div class="payment-logo bg-blue-50">
+              <i class="fab fa-apple-pay text-blue-600"></i>
+            </div>
+            <div>
+              <div class="font-bold">Dana</div>
+              <div class="text-lg font-mono">0812 3456 7890</div>
+              <div class="text-sm text-gray-600">a.n. Ebook Store Indonesia</div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Credit Card Details -->
+        <div class="payment-details" id="creditDetails">
+          <h5 class="font-bold mb-3">Pembayaran Kartu Kredit</h5>
+          
+          <div class="payment-detail">
+            <div class="payment-logo bg-blue-50">
+              <i class="fab fa-cc-visa text-blue-600"></i>
+            </div>
+            <div>
+              <div class="font-bold">Visa</div>
+              <div class="text-sm text-gray-600">Gunakan kartu Visa untuk pembayaran</div>
+            </div>
+          </div>
+          
+          <div class="payment-detail">
+            <div class="payment-logo bg-orange-50">
+              <i class="fab fa-cc-mastercard text-orange-600"></i>
+            </div>
+            <div>
+              <div class="font-bold">Mastercard</div>
+              <div class="text-sm text-gray-600">Gunakan kartu Mastercard untuk pembayaran</div>
+            </div>
+          </div>
+          
+          <div class="payment-detail">
+            <div class="payment-logo bg-red-50">
+              <i class="fab fa-cc-jcb text-red-600"></i>
+            </div>
+            <div>
+              <div class="font-bold">JCB</div>
+              <div class="text-sm text-gray-600">Gunakan kartu JCB untuk pembayaran</div>
+            </div>
+          </div>
+          
+          <div class="mt-4">
+            <p class="text-sm text-gray-600">Pembayaran kartu kredit diproses melalui payment gateway yang aman dan terpercaya.</p>
+          </div>
+        </div>
+        
+        <!-- Form Pembelian -->
+        <form class="mt-6">
+          <div class="mb-6">
+            <label class="block text-gray-700 mb-2 font-medium">Data Pembeli</label>
+            <input type="text" placeholder="Nama Lengkap" class="w-full p-3 border rounded-lg mb-3 focus:ring-primary focus:border-primary" required>
+            <input type="email" placeholder="Email" class="w-full p-3 border rounded-lg mb-3 focus:ring-primary focus:border-primary" required>
+            <input type="tel" placeholder="Nomor WhatsApp" class="w-full p-3 border rounded-lg focus:ring-primary focus:border-primary" required>
+          </div>
+          
+          <div class="mb-6">
+            <label class="block text-gray-700 mb-2 font-medium">Catatan (Opsional)</label>
+            <textarea placeholder="Catatan tambahan untuk pembelian" class="w-full p-3 border rounded-lg focus:ring-primary focus:border-primary" rows="3"></textarea>
+          </div>
+          
+          <button type="submit" class="w-full bg-primary hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition duration-300 flex items-center justify-center">
+            <i class="fas fa-lock mr-2"></i> Konfirmasi Pembelian
+          </button>
+        </form>
+        
+        <div class="mt-4 text-center text-sm text-gray-600">
+          <i class="fas fa-shield-alt text-green-500 mr-1"></i> Transaksi 100% Aman & Terjamin
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-gray-300 pt-16 pb-8">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <!-- Company Info -->
+        <div>
+          <div class="flex items-center mb-4">
+            <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center mr-3">
+              <i class="fas fa-book text-white text-xl"></i>
+            </div>
+            <h3 class="text-xl font-bold text-white">EbookStore<span class="text-secondary">ID</span></h3>
+          </div>
+          <p class="mb-4">
+            Menyediakan ebook dan website premium untuk membantu Anda sukses di era digital.
+          </p>
+          <div class="flex space-x-4">
+            <a href="#" class="text-gray-400 hover:text-white">
+              <i class="fab fa-facebook-f"></i>
+            </a>
+            <a href="#" class="text-gray-400 hover:text-white">
+              <i class="fab fa-instagram"></i>
+            </a>
+            <a href="#" class="text-gray-400 hover:text-white">
+              <i class="fab fa-youtube"></i>
+            </a>
+            <a href="#" class="text-gray-400 hover:text-white">
+              <i class="fab fa-linkedin-in"></i>
+            </a>
+          </div>
+        </div>
+        
+        <!-- Links -->
+        <div>
+          <h4 class="text-lg font-semibold text-white mb-4">Tautan Cepat</h4>
+          <ul class="space-y-2">
+            <li><a href="#" class="hover:text-white">Tentang Kami</a></li>
+            <li><a href="#" class="hover:text-white">Produk Kami</a></li>
+            <li><a href="#" class="hover:text-white">Blog</a></li>
+            <li><a href="#" class="hover:text-white">Testimoni</a></li>
+            <li><a href="#" class="hover:text-white">Kebijakan Privasi</a></li>
+          </ul>
+        </div>
+        
+        <!-- Products -->
+        <div>
+          <h4 class="text-lg font-semibold text-white mb-4">Produk</h4>
+          <ul class="space-y-2">
+            <li><a href="#" class="hover:text-white">Ebook Bisnis</a></li>
+            <li><a href="#" class="hover:text-white">Website Siap Pakai</a></li>
+            <li><a href="#" class="hover:text-white">Paket Kombo</a></li>
+            <li><a href="#" class="hover:text-white">Template Website</a></li>
+            <li><a href="#" class="hover:text-white">Kursus Online</a></li>
+          </ul>
+        </div>
+        
+        <!-- Contact -->
+        <div id="contact">
+          <h4 class="text-lg font-semibold text-white mb-4">Kontak Kami</h4>
+          <ul class="space-y-3">
+            <li class="flex items-start">
+              <i class="fas fa-map-marker-alt mt-1 mr-3 text-secondary"></i>
+              <span>Jl. kronjo No. 123, tangerang, Indonesia</span>
+            </li>
+            <li class="flex items-center">
+              <i class="fas fa-phone-alt mr-3 text-secondary"></i>
+              <span>+62 83150273295</span>
+            </li>
+            <li class="flex items-center">
+              <i class="fas fa-envelope mr-3 text-secondary"></i>
+              <span>info@ebookstoreid.com</span>
+            </li>
+            <li class="flex items-center">
+              <i class="fab fa-whatsapp mr-3 text-secondary"></i>
+              <span>+62 812 3456 7890</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="border-t border-gray-800 mt-12 pt-8 text-center text-sm">
+        <p>&copy; 2025 Ebook Store Indonesia. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Script -->
+  <script>
+    // Filter Toggle (Mobile)
+    const filterToggle = document.getElementById('filterToggle');
+    const filterSidebar = document.querySelector('.filter-sidebar');
+    const filterOverlay = document.getElementById('filterOverlay');
+    const closeFilter = document.getElementById('closeFilter');
+    
+    filterToggle.addEventListener('click', () => {
+      filterSidebar.classList.add('active');
+      filterOverlay.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    });
+    
+    closeFilter.addEventListener('click', () => {
+      filterSidebar.classList.remove('active');
+      filterOverlay.classList.remove('active');
+      document.body.style.overflow = '';
+    });
+    
+    filterOverlay.addEventListener('click', () => {
+      filterSidebar.classList.remove('active');
+      filterOverlay.classList.remove('active');
+      document.body.style.overflow = '';
+    });
+    
+    // Price Slider
+    const priceSlider = document.getElementById('priceRange');
+    const priceValue = document.getElementById('priceValue');
+    
+    priceSlider.addEventListener('input', () => {
+      const value = parseInt(priceSlider.value);
+      priceValue.textContent = `Hingga Rp${value.toLocaleString('id-ID')}`;
+    });
+    
+    // Modal Pembelian
+    const purchaseModal = document.getElementById('purchaseModal');
+    const closeModal = document.getElementById('closeModal');
+    const btnBuy = document.querySelectorAll('.btn-buy');
+    const paymentMethods = document.querySelectorAll('.payment-method');
+    const bankDetails = document.getElementById('bankDetails');
+    const ewalletDetails = document.getElementById('ewalletDetails');
+    const creditDetails = document.getElementById('creditDetails');
+    
+    // Tampilkan modal saat tombol beli diklik
+    btnBuy.forEach(button => {
+      button.addEventListener('click', () => {
+        const productName = button.getAttribute('data-product');
+        const productPrice = parseInt(button.getAttribute('data-price'));
+        const discount = parseInt(button.getAttribute('data-discount'));
+        const productImage = button.getAttribute('data-image');
+        
+        // Format harga untuk ditampilkan
+        const formattedPrice = new Intl.NumberFormat('id-ID', {
+          style: 'currency',
+          currency: 'IDR',
+          minimumFractionDigits: 0
+        }).format(productPrice);
+        
+        // Hitung harga asli jika ada diskon
+        let oldPrice = '';
+        if (discount > 0) {
+          const originalPrice = Math.round(productPrice / (1 - discount/100));
+          oldPrice = new Intl.NumberFormat('id-ID', {
+            style: 'currency',
+            currency: 'IDR',
+            minimumFractionDigits: 0
+          }).format(originalPrice);
+        }
+        
+        // Tampilkan badge diskon
+        let discountBadge = '';
+        if (discount > 0) {
+          discountBadge = `DISKON ${discount}%`;
+        }
+        
+        // Set data ke modal
+        document.getElementById('modalProductName').textContent = productName;
+        document.getElementById('modalProductPrice').textContent = formattedPrice;
+        document.getElementById('modalProductOldPrice').textContent = oldPrice;
+        document.getElementById('modalDiscountBadge').textContent = discountBadge;
+        document.getElementById('modalProductImage').src = productImage;
+        
+        // Reset pilihan pembayaran
+        paymentMethods.forEach(method => method.classList.remove('selected'));
+        bankDetails.style.display = 'none';
+        ewalletDetails.style.display = 'none';
+        creditDetails.style.display = 'none';
+        
+        // Tampilkan modal
+        purchaseModal.classList.add('show');
+        document.body.style.overflow = 'hidden';
+      });
+    });
+    
+    // Tutup modal
+    closeModal.addEventListener('click', () => {
+      purchaseModal.classList.remove('show');
+      document.body.style.overflow = '';
+    });
+    
+    // Pilih metode pembayaran
+    paymentMethods.forEach(method => {
+      method.addEventListener('click', () => {
+        paymentMethods.forEach(m => m.classList.remove('selected'));
+        method.classList.add('selected');
+        
+        const paymentType = method.getAttribute('data-method');
+        
+        // Sembunyikan semua detail pembayaran
+        bankDetails.style.display = 'none';
+        ewalletDetails.style.display = 'none';
+        creditDetails.style.display = 'none';
+        
+        // Tampilkan detail yang sesuai
+        if (paymentType === 'bank') {
+          bankDetails.style.display = 'block';
+        } else if (paymentType === 'ewallet') {
+          ewalletDetails.style.display = 'block';
+        } else if (paymentType === 'credit') {
+          creditDetails.style.display = 'block';
+        }
+      });
+    });
+    
+    // Tutup modal jika mengklik di luar konten modal
+    window.addEventListener('click', (e) => {
+      if (e.target === purchaseModal) {
+        purchaseModal.classList.remove('show');
+        document.body.style.overflow = '';
+      }
+    });
+  </script>
+</body>
+</html>

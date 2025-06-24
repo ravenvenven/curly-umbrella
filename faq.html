@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FAQ & Kontak - Ebook Store Indonesia</title>
+  <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/1163/1163661.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#2563eb',
+            secondary: '#10b981',
+            accent: '#f59e0b',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+  
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+  
+    html, body {
+      width: 100%;
+      max-width: 100%;
+      overflow-x: hidden;
+    }
+  
+    body {
+      font-family: 'Poppins', sans-serif;
+      scroll-behavior: smooth;
+      background-color: #f8fafc;
+    }
+  
+    .faq-item {
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 16px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    }
+  
+    .faq-question {
+      background-color: white;
+      padding: 20px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 500;
+      transition: all 0.3s;
+    }
+  
+    .faq-question:hover {
+      background-color: #f0f7ff;
+    }
+  
+    .faq-question i {
+      transition: transform 0.3s;
+    }
+  
+    .faq-item.active .faq-question i {
+      transform: rotate(180deg);
+    }
+  
+    .faq-answer {
+      background-color: white;
+      padding: 0 20px;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease, padding 0.3s ease;
+    }
+  
+    .faq-item.active .faq-answer {
+      max-height: 500px;
+      padding: 0 20px 20px 20px;
+    }
+  
+    /* Pastikan layout tidak keluar layar di perangkat kecil */
+    .max-w-7xl, .max-w-4xl {
+      width: 100%;
+      overflow-x: hidden;
+    }
+  
+    section, header, nav, div, p, ul, ol, li {
+      max-width: 100vw;
+      overflow-wrap: break-word;
+    }
+  </style>
+  
+<body class="bg-gray-50 text-gray-800">
+    <!-- Header -->
+    <header class="bg-white shadow-md sticky top-0 z-50">
+      <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+        <div class="flex items-center">
+          <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center mr-3">
+            <i class="fas fa-book text-white text-xl"></i>
+          </div>
+          <h1 class="text-xl md:text-2xl font-bold text-primary">EbookStore<span class="text-secondary">ID</span></h1>
+        </div>
+        
+    
+    </header>
+       <!-- Menu Mobile -->
+   <div class="mobile-menu" id="mobileMenu">
+    <div class="px-6 py-4">
+      <a href="index.html" class="block py-3 px-4 rounded-lg hover:bg-gray-100 font-medium">Beranda</a>
+      <a href="produk.html" class="block py-3 px-4 rounded-lg hover:bg-gray-100 font-medium">Produk</a>
+      <div class="py-3 px-4">
+        <button class="flex items-center justify-between w-full font-medium">
+          <span>Kategori</span>
+          <i class="fas fa-chevron-down text-xs"></i>
+        </button>
+        <div class="mt-2 pl-4 hidden" id="mobileSubmenu">
+          <a href="#" class="block py-2 hover:bg-gray-100">Ebook Bisnis</a>
+          <a href="#" class="block py-2 hover:bg-gray-100">Website Siap Pakai</a>
+          <a href="#" class="block py-2 hover:bg-gray-100">Paket Kombo</a>
+          <a href="#" class="block py-2 hover:bg-gray-100">Template Website</a>
+        </div>
+      </div>
+      <a href="testimoni.html" class="block py-3 px-4 rounded-lg hover:bg-gray-100 font-medium">Testimoni</a>
+      <a href="faq.html" class="block py-3 px-4 rounded-lg hover:bg-gray-100 font-medium">FAQ</a>
+      <a href="kontak.html" class="block py-3 px-4 rounded-lg bg-primary text-white font-semibold mt-4 text-center">
+        Kontak Kami
+      </a>
+    </div>
+  </div>
+  
+  <div class="menu-overlay" id="menuOverlay"></div>
+
+    
+    <!-- FAQ Section -->
+    <section id="faq" class="py-16 bg-gradient-to-r from-blue-50 to-indigo-50">
+      <div class="max-w-7xl mx-auto px-4">
+        <div class="text-center mb-12">
+          <h1 class="text-3xl md:text-4xl font-bold text-gray-800">Pertanyaan yang Sering Ditanyakan</h1>
+          <p class="mt-4 text-gray-600 max-w-2xl mx-auto">Temukan jawaban untuk pertanyaan umum seputar produk, pembayaran, dan dukungan kami</p>
+        </div>
+        
+        <div class="max-w-4xl mx-auto">
+          <!-- FAQ Group: Pembelian -->
+          <div>
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">Pembelian</h2>
+            <div class="space-y-4">
+              <div class="faq-item">
+                <div class="faq-question">
+                  <span>Bagaimana cara membeli produk di EbookStoreID?</span>
+                  <i class="fas fa-chevron-down text-primary"></i>
+                </div>
+                <div class="faq-answer">
+                  <p class="text-gray-600">Untuk membeli produk, ikuti langkah berikut:</p>
+                  <ol class="list-decimal pl-6 mt-2 space-y-2 text-gray-600">
+                    <li>Pilih produk yang ingin Anda beli</li>
+                    <li>Klik tombol "Beli Sekarang"</li>
+                    <li>Pilih metode pembayaran yang diinginkan</li>
+                    <li>Lakukan pembayaran sesuai instruksi</li>
+                    <li>Setelah pembayaran diverifikasi, produk akan dikirim ke email Anda</li>
+                  </ol>
+                </div>
+              </div>
+              
+              <div class="faq-item">
+                <div class="faq-question">
+                  <span>Apakah saya perlu membuat akun untuk membeli produk?</span>
+                  <i class="fas fa-chevron-down text-primary"></i>
+                </div>
+                <div class="faq-answer">
+                  <p class="text-gray-600">Anda tidak diwajibkan membuat akun untuk melakukan pembelian. Namun, dengan membuat akun, Anda akan mendapatkan beberapa keuntungan:</p>
+                  <ul class="list-disc pl-6 mt-2 space-y-2 text-gray-600">
+                    <li>Riwayat pembelian yang tersimpan</li>
+                    <li>Akses lebih cepat untuk pembelian berikutnya</li>
+                    <li>Notifikasi update produk dan promo</li>
+                    <li>Fitur wishlist untuk menyimpan produk favorit</li>
+                  </ul>
+                </div>
+              </div>
+              
+              <div class="faq-item">
+                <div class="faq-question">
+                  <span>Bagaimana jika saya ingin membeli dalam jumlah banyak?</span>
+                  <i class="fas fa-chevron-down text-primary"></i>
+                </div>
+                <div class="faq-answer">
+                  <p class="text-gray-600">Jika Anda ingin membeli dalam jumlah banyak untuk keperluan tim atau perusahaan, kami menyediakan program khusus:</p>
+                  <ul class="list-disc pl-6 mt-2 space-y-2 text-gray-600">
+                    <li>Diskon khusus untuk pembelian volume besar</li>
+                    <li>Lisensi khusus untuk penggunaan tim</li>
+                    <li>Dukungan implementasi khusus</li>
+                    <li>Customisasi produk sesuai kebutuhan</li>
+                  </ul>
+                  <p class="mt-4 text-gray-600">Silakan hubungi tim penjualan kami melalui <a href="mailto:sales@ebookstoreid.com" class="text-primary">sales@ebookstoreid.com</a> atau WhatsApp <a href="https://wa.me/6281234567890" class="text-primary">+62 812 3456 7890</a> untuk informasi lebih lanjut.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- FAQ Group: Pembayaran -->
+          <div class="mt-12">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">Pembayaran</h2>
+            <div class="space-y-4">
+              <div class="faq-item">
+                <div class="faq-question">
+                  <span>Metode pembayaran apa saja yang tersedia?</span>
+                  <i class="fas fa-chevron-down text-primary"></i>
+                </div>
+                <div class="faq-answer">
+                  <p class="text-gray-600">Kami menyediakan berbagai metode pembayaran untuk kenyamanan Anda:</p>
+                  <ul class="list-disc pl-6 mt-2 space-y-2 text-gray-600">
+                    <li><strong>Transfer Bank:</strong> BCA, BRI, Mandiri, BNI</li>
+                    <li><strong>E-Wallet:</strong> OVO, Gopay, Dana, ShopeePay</li>
+                    <li><strong>Kartu Kredit:</strong> Visa, Mastercard, JCB</li>
+                    <li><strong>Retail:</strong> Alfamart, Indomaret (khusus pembayaran offline)</li>
+                  </ul>
+                </div>
+              </div>
+              
+              <div class="faq-item">
+                <div class="faq-question">
+                  <span>Berapa lama waktu verifikasi pembayaran?</span>
+                  <i class="fas fa-chevron-down text-primary"></i>
+                </div>
+                <div class="faq-answer">
+                  <p class="text-gray-600">Waktu verifikasi pembayaran bervariasi tergantung metode:</p>
+                  <ul class="list-disc pl-6 mt-2 space-y-2 text-gray-600">
+                    <li><strong>Transfer Bank:</strong> 1-3 jam (pada jam kerja), maksimal 12 jam</li>
+                    <li><strong>E-Wallet:</strong> Instan hingga 1 jam</li>
+                    <li><strong>Kartu Kredit:</strong> Instan</li>
+                    <li><strong>Retail:</strong> 3-6 jam setelah pembayaran dilakukan</li>
+                  </ul>
+                  <p class="mt-4 text-gray-600">Jika pembayaran Anda belum terverifikasi setelah waktu tersebut, silakan hubungi customer service kami dengan menyertakan bukti pembayaran.</p>
+                </div>
+              </div>
+              
+              <div class="faq-item">
+                <div class="faq-question">
+                  <span>Apakah saya bisa mendapatkan invoice atau faktur pajak?</span>
+                  <i class="fas fa-chevron-down text-primary"></i>
+                </div>
+                <div class="faq-answer">
+                  <p class="text-gray-600">Ya, kami menyediakan invoice resmi untuk setiap pembelian. Invoice akan dikirimkan ke email Anda bersamaan dengan produk yang dibeli.</p>
+                  <p class="mt-4 text-gray-600">Untuk faktur pajak (faktur pajak elektronik atau e-faktur), Anda dapat meminta melalui email ke <a href="mailto:accounting@ebookstoreid.com" class="text-primary">accounting@ebookstoreid.com</a> dengan menyertakan:</p>
+                  <ul class="list-disc pl-6 mt-2 space-y-2 text-gray-600">
+                    <li>Nomor invoice</li>
+                    <li>Nama perusahaan (jika ada)</li>
+                    <li>NPWP perusahaan</li>
+                    <li>Alamat perusahaan</li>
+                  </ul>
+                  <p class="mt-4 text-gray-600">Faktur pajak akan dikirimkan dalam waktu 1-3 hari kerja setelah permintaan diterima.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- FAQ Group: Produk -->
+          <div class="mt-12">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">Produk</h2>
+            <div class="space-y-4">
+              <div class="faq-item">
+                <div class="faq-question">
+                  <span>Bagaimana cara mengakses produk setelah pembayaran?</span>
+                  <i class="fas fa-chevron-down text-primary"></i>
+                </div>
+                <div class="faq-answer">
+                  <p class="text-gray-600">Setelah pembayaran Anda diverifikasi, produk akan dikirimkan melalui:</p>
+                  <ul class="list-disc pl-6 mt-2 space-y-2 text-gray-600">
+                    <li><strong>Email:</strong> Produk akan dikirim ke email yang Anda daftarkan saat pembelian. Silakan cek folder inbox, spam, atau promo.</li>
+                    <li><strong>Akun Member:</strong> Jika Anda membeli dengan akun, produk dapat diakses melalui dashboard akun Anda.</li>
+                    <li><strong>WhatsApp:</strong> Untuk beberapa produk tertentu, link akses juga akan dikirim via WhatsApp.</li>
+                  </ul>
+                  <p class="mt-4 text-gray-600">Jika Anda tidak menerima produk dalam 24 jam setelah pembayaran diverifikasi, silakan hubungi customer service kami.</p>
+                </div>
+              </div>
+              
+              <div class="faq-item">
+                <div class="faq-question">
+                  <span>Apakah produk mendapatkan update setelah pembelian?</span>
+                  <i class="fas fa-chevron-down text-primary"></i>
+                </div>
+                <div class="faq-answer">
+                  <p class="text-gray-600">Ya, sebagian besar produk kami mendapatkan update rutin. Kebijakan update:</p>
+                  <ul class="list-disc pl-6 mt-2 space-y-2 text-gray-600">
+                    <li><strong>Ebook:</strong> Update gratis selama 1 tahun setelah pembelian</li>
+                    <li><strong>Website/Template:</strong> Update mayor gratis selama 6 bulan, update minor gratis selamanya</li>
+                    <li><strong>Paket Kombo:</strong> Update gratis selama 2 tahun</li>
+                    <li><strong>Kursus Online:</strong> Akses seumur hidup termasuk semua update</li>
+                  </ul>
+                  <p class="mt-4 text-gray-600">Anda akan mendapatkan notifikasi via email ketika update tersedia. Untuk produk digital, Anda dapat mendownload versi terbaru melalui link yang sama atau melalui akun member Anda.</p>
+                </div>
+              </div>
+              
+              <div class="faq-item">
+                <div class="faq-question">
+                  <span>Apakah ada garansi untuk produk digital?</span>
+                  <i class="fas fa-chevron-down text-primary"></i>
+                </div>
+                <div class="faq-answer">
+                  <p class="text-gray-600">Kami menawarkan garansi kepuasan 30 hari untuk semua produk digital. Jika Anda tidak puas dengan produk yang dibeli, Anda dapat:</p>
+                  <ul class="list-disc pl-6 mt-2 space-y-2 text-gray-600">
+                    <li>Meminta refund penuh</li>
+                    <li>Menukar dengan produk lain yang setara</li>
+                    <li>Meminta bantuan tambahan untuk implementasi</li>
+                  </ul>
+                  <p class="mt-4 text-gray-600">Syarat dan ketentuan garansi:</p>
+                  <ul class="list-disc pl-6 mt-2 space-y-2 text-gray-600">
+                    <li>Permintaan diajukan dalam 30 hari setelah pembelian</li>
+                    <li>Menyertakan alasan jelas ketidakpuasan</li>
+                    <li>Belum menggunakan lebih dari 50% konten produk</li>
+                    <li>Untuk website/template, belum digunakan untuk produksi</li>
+                  </ul>
+                  <p class="mt-4 text-gray-600">Silakan kirim permintaan garansi ke <a href="mailto:support@ebookstoreid.com" class="text-primary">support@ebookstoreid.com</a> dengan menyertakan nomor invoice dan penjelasan.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>       
+    <script>
+
+        // FAQ Accordion
+        const faqItems = document.querySelectorAll('.faq-item');
+        
+        faqItems.forEach(item => {
+          const question = item.querySelector('.faq-question');
+          
+          question.addEventListener('click', () => {
+            // Close other items
+            faqItems.forEach(otherItem => {
+              if (otherItem !== item) {
+                otherItem.classList.remove('active');
+              }
+            });
+            
+            // Toggle current item
+            item.classList.toggle('active');
+          });
+        });
+      </script> 
+    </body>
+    </html>

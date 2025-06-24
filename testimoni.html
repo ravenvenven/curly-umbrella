@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Testimoni Pelanggan - Ebook Store Indonesia</title>
+  <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/1163/1163661.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#2563eb',
+            secondary: '#10b981',
+            accent: '#f59e0b',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+    
+    * {
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      scroll-behavior: smooth;
+      background-color: #f8fafc;
+    }
+    
+    .testimonial-card {
+      transition: all 0.3s ease;
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .testimonial-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    }
+    
+    .quote-icon {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      opacity: 0.1;
+      font-size: 70px;
+      color: #2563eb;
+      z-index: 0;
+    }
+    
+    .rating-stars {
+      display: inline-flex;
+    }
+    
+    .rating-stars .star {
+      color: #d1d5db;
+    }
+    
+    .rating-stars .star.filled {
+      color: #f59e0b;
+    }
+    
+    .testimonial-image {
+      transition: transform 0.5s ease;
+    }
+    
+    .testimonial-card:hover .testimonial-image {
+      transform: scale(1.05);
+    }
+    
+    .testimonial-timeline {
+      position: relative;
+      padding-left: 30px;
+      border-left: 2px solid #e5e7eb;
+    }
+    
+    .testimonial-timeline::before {
+      content: "";
+      position: absolute;
+      left: -8px;
+      top: 0;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #2563eb;
+    }
+    
+    .timeline-date {
+      position: absolute;
+      left: -120px;
+      top: -5px;
+      background: #2563eb;
+      color: white;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+    }
+    
+    .video-testimonial {
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    
+    .video-testimonial::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(0deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.1) 100%);
+      z-index: 1;
+    }
+    
+    .play-button {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 60px;
+      height: 60px;
+      background: rgba(255,255,255,0.8);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .play-button:hover {
+      background: white;
+      transform: translate(-50%, -50%) scale(1.1);
+    }
+    
+    .testimonial-stats-card {
+      transition: all 0.3s ease;
+    }
+    
+    .testimonial-stats-card:hover {
+      transform: translateY(-5px);
+    }
+    
+    .testimonial-form {
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      border-radius: 15px;
+      overflow: hidden;
+    }
+    
+    .form-input {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: white;
+    }
+    
+    .form-input::placeholder {
+      color: rgba(255,255,255,0.7);
+    }
+    
+    .form-input:focus {
+      background: rgba(255,255,255,0.15);
+      border-color: rgba(255,255,255,0.4);
+    }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+  <!-- Header -->
+  <header class="bg-white shadow-md sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+      <div class="flex items-center">
+        <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center mr-3">
+          <i class="fas fa-book text-white text-xl"></i>
+        </div>
+        <h1 class="text-xl md:text-2xl font-bold text-primary">EbookStore<span class="text-secondary">ID</span></h1>
+      </div>
+  </header>
+   <!-- Menu Mobile -->
+   <div class="mobile-menu" id="mobileMenu">
+    <div class="px-6 py-4">
+      <a href="index.html" class="block py-3 px-4 rounded-lg hover:bg-gray-100 font-medium">Beranda</a>
+      <a href="produk.html" class="block py-3 px-4 rounded-lg hover:bg-gray-100 font-medium">Produk</a>
+      <div class="py-3 px-4">
+        <button class="flex items-center justify-between w-full font-medium">
+          <span>Kategori</span>
+          <i class="fas fa-chevron-down text-xs"></i>
+        </button>
+        <div class="mt-2 pl-4 hidden" id="mobileSubmenu">
+          <a href="#" class="block py-2 hover:bg-gray-100">Ebook Bisnis</a>
+          <a href="#" class="block py-2 hover:bg-gray-100">Website Siap Pakai</a>
+          <a href="#" class="block py-2 hover:bg-gray-100">Paket Kombo</a>
+          <a href="#" class="block py-2 hover:bg-gray-100">Template Website</a>
+        </div>
+      </div>
+      <a href="testimoni.html" class="block py-3 px-4 rounded-lg hover:bg-gray-100 font-medium">Testimoni</a>
+      <a href="faq.html" class="block py-3 px-4 rounded-lg hover:bg-gray-100 font-medium">FAQ</a>
+      <a href="kontak.html" class="block py-3 px-4 rounded-lg bg-primary text-white font-semibold mt-4 text-center">
+        Kontak Kami
+      </a>
+    </div>
+  </div>
+  
+  <div class="menu-overlay" id="menuOverlay"></div>
+
+  <!-- Hero Testimonial -->
+  <section class="bg-gradient-to-r from-blue-50 to-indigo-50 py-16">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center">
+      <div class="md:w-1/2 mb-10 md:mb-0">
+        <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 leading-tight">
+          Apa Kata <span class="text-primary">Pelanggan Kami</span>
+        </h1>
+        <p class="mt-4 text-lg text-gray-600 max-w-xl">
+          Ribuan pelanggan telah merasakan manfaat produk digital kami. Berikut pengalaman dan kesuksesan yang mereka raih.
+        </p>
+        
+        <div class="mt-8 flex items-center">
+          <div class="flex -space-x-2">
+            <img src="https://randomuser.me/api/portraits/women/32.jpg" class="w-10 h-10 rounded-full border-2 border-white">
+            <img src="https://randomuser.me/api/portraits/men/44.jpg" class="w-10 h-10 rounded-full border-2 border-white">
+            <img src="https://randomuser.me/api/portraits/women/68.jpg" class="w-10 h-10 rounded-full border-2 border-white">
+            <img src="https://randomuser.me/api/portraits/men/97.jpg" class="w-10 h-10 rounded-full border-2 border-white">
+          </div>
+          <div class="ml-3">
+            <p class="text-sm font-medium text-gray-700">Lebih dari <span class="text-primary font-bold">5,000+</span> pelanggan puas</p>
+            <div class="flex items-center">
+              <div class="flex text-yellow-400">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star-half-alt"></i>
+              </div>
+              <span class="ml-2 text-gray-600">4.8/5.0 Rating</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="md:w-1/2 flex justify-center">
+        <div class="relative bg-white rounded-xl shadow-lg p-2">
+          <div class="bg-gray-200 border-2 border-dashed rounded-xl w-full h-64 flex items-center justify-center text-gray-500">
+            <i class="fas fa-play-circle text-5xl text-primary"></i>
+          </div>
+          <div class="absolute -bottom-4 -right-4 bg-white rounded-lg shadow-lg p-4 w-48">
+            <div class="flex items-center">
+              <div class="bg-green-100 p-2 rounded-full">
+                <i class="fas fa-video text-green-600"></i>
+              </div>
+              <div class="ml-3">
+                <p class="text-sm font-bold">TESTIMONI VIDEO</p>
+                <p class="text-xs text-gray-600">Pengalaman Pelanggan</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Statistik Testimoni -->
+  <section class="py-12 bg-white">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+        <div class="testimonial-stats-card bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-6 text-center">
+          <div class="text-3xl font-bold text-primary">5,000+</div>
+          <p class="text-gray-600 mt-2">Pelanggan</p>
+        </div>
+        
+        <div class="testimonial-stats-card bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-6 text-center">
+          <div class="text-3xl font-bold text-secondary">98%</div>
+          <p class="text-gray-600 mt-2">Kepuasan Pelanggan</p>
+        </div>
+        
+        <div class="testimonial-stats-card bg-gradient-to-br from-amber-50 to-yellow-50 rounded-xl p-6 text-center">
+          <div class="text-3xl font-bold text-accent">4.8/5</div>
+          <p class="text-gray-600 mt-2">Rating Rata-rata</p>
+        </div>
+        
+        <div class="testimonial-stats-card bg-gradient-to-br from-purple-50 to-violet-50 rounded-xl p-6 text-center">
+          <div class="text-3xl font-bold text-purple-600">1,200+</div>
+          <p class="text-gray-600 mt-2">Testimoni</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimoni Terbaru -->
+  <section class="py-16 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-gray-800">Testimoni Terbaru</h2>
+        <p class="mt-3 text-gray-600">Pengalaman terbaru dari pelanggan kami</p>
+        
+        <div class="mt-6 flex justify-center">
+          <div class="inline-flex bg-gray-200 rounded-lg p-1">
+            <button class="py-2 px-4 rounded-lg bg-primary text-white font-medium">Semua</button>
+            <button class="py-2 px-4 rounded-lg font-medium hover:bg-gray-300 transition">Ebook</button>
+            <button class="py-2 px-4 rounded-lg font-medium hover:bg-gray-300 transition">Website</button>
+            <button class="py-2 px-4 rounded-lg font-medium hover:bg-gray-300 transition">Paket Kombo</button>
+          </div>
+        </div>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Testimoni 1 -->
+        <div class="testimonial-card bg-white rounded-xl shadow-md p-6">
+          <div class="quote-icon">
+            <i class="fas fa-quote-right"></i>
+          </div>
+          <div class="flex items-center mb-4">
+            <img src="https://randomuser.me/api/portraits/women/32.jpg" class="w-12 h-12 rounded-full mr-4">
+            <div>
+              <h4 class="font-bold">Sarah Wijaya</h4>
+              <div class="flex text-yellow-400 mt-1">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+              </div>
+            </div>
+          </div>
+          <p class="text-gray-600 relative z-10">"Paket ebook dan website ini sangat membantu bisnis online saya. Penjualan meningkat 200% hanya dalam 1 bulan! Dukungan timnya juga sangat responsif."</p>
+          
+          <div class="mt-6 flex items-center">
+            <div class="bg-gray-200 border-2 border-dashed rounded-xl w-16 h-16 mr-4"></div>
+            <div>
+              <p class="font-medium">Paket Ebook + Website</p>
+              <div class="flex text-gray-600">
+                <i class="fas fa-calendar-alt mr-2 mt-1"></i>
+                <span>12 Juni 2025</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Testimoni 2 -->
+        <div class="testimonial-card bg-white rounded-xl shadow-md p-6">
+          <div class="quote-icon">
+            <i class="fas fa-quote-right"></i>
+          </div>
+          <div class="flex items-center mb-4">
+            <img src="https://randomuser.me/api/portraits/men/44.jpg" class="w-12 h-12 rounded-full mr-4">
+            <div>
+              <h4 class="font-bold">Budi Santoso</h4>
+              <div class="flex text-yellow-400 mt-1">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star-half-alt"></i>
+              </div>
+            </div>
+          </div>
+          <p class="text-gray-600 relative z-10">"Website siap pakainya sangat profesional. Tidak perlu coding sama sekali, langsung bisa digunakan untuk bisnis. Bonusnya juga sangat bermanfaat!"</p>
+          
+          <div class="mt-6 flex items-center">
+            <div class="bg-gray-200 border-2 border-dashed rounded-xl w-16 h-16 mr-4"></div>
+            <div>
+              <p class="font-medium">Website Siap Pakai</p>
+              <div class="flex text-gray-600">
+                <i class="fas fa-calendar-alt mr-2 mt-1"></i>
+                <span>5 Juni 2025</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Testimoni 3 -->
+        <div class="testimonial-card bg-white rounded-xl shadow-md p-6">
+          <div class="quote-icon">
+            <i class="fas fa-quote-right"></i>
+          </div>
+          <div class="flex items-center mb-4">
+            <img src="https://randomuser.me/api/portraits/women/68.jpg" class="w-12 h-12 rounded-full mr-4">
+            <div>
+              <h4 class="font-bold">Dewi Lestari</h4>
+              <div class="flex text-yellow-400 mt-1">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+              </div>
+            </div>
+          </div>
+          <p class="text-gray-600 relative z-10">"Ebook jualan larisnya memberikan strategi yang praktis dan langsung bisa diaplikasikan. Sangat direkomendasikan untuk pemula yang ingin mulai berjualan online!"</p>
+          
+          <div class="mt-6 flex items-center">
+            <div class="bg-gray-200 border-2 border-dashed rounded-xl w-16 h-16 mr-4"></div>
+            <div>
+              <p class="font-medium">Ebook Jualan Laris</p>
+              <div class="flex text-gray-600">
+                <i class="fas fa-calendar-alt mr-2 mt-1"></i>
+                <span>28 Mei 2025</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="mt-12 text-center">
+        <button class="bg-primary hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-lg transition duration-300">
+          Lihat Lebih Banyak Testimoni
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Video Testimoni -->
+  <section class="py-16 bg-white">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-gray-800">Testimoni Video</h2>
+        <p class="mt-3 text-gray-600">Pengalaman langsung dari pelanggan kami</p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- Video 1 -->
+        <div class="video-testimonial">
+          <div class="bg-gray-200 border-2 border-dashed rounded-xl w-full h-64"></div>
+          <div class="play-button">
+            <i class="fas fa-play text-primary text-xl"></i>
+          </div>
+          <div class="absolute bottom-0 left-0 p-6 z-10">
+            <h3 class="text-white font-bold text-lg">Pengalaman Sarah dengan Paket Kombo</h3>
+            <div class="flex text-yellow-400 mt-1">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Video 2 -->
+        <div class="video-testimonial">
+          <div class="bg-gray-200 border-2 border-dashed rounded-xl w-full h-64"></div>
+          <div class="play-button">
+            <i class="fas fa-play text-primary text-xl"></i>
+          </div>
+          <div class="absolute bottom-0 left-0 p-6 z-10">
+            <h3 class="text-white font-bold text-lg">Budi Meningkatkan Penjualan dengan Website</h3>
+            <div class="flex text-yellow-400 mt-1">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star-half-alt"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Timeline Testimoni -->
+  <section class="py-16 bg-gradient-to-br from-blue-50 to-indigo-50">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-gray-800">Perjalanan Kesuksesan</h2>
+        <p class="mt-3 text-gray-600">Kisah transformasi digital pelanggan kami</p>
+      </div>
+      
+      <div class="max-w-3xl mx-auto">
+        <!-- Timeline Item 1 -->
+        <div class="testimonial-timeline mb-12 pl-8 pb-6 relative">
+          <div class="timeline-date">Januari 2025</div>
+          <div class="bg-white rounded-xl shadow-md p-6">
+            <div class="flex items-center mb-4">
+              <img src="https://randomuser.me/api/portraits/men/22.jpg" class="w-12 h-12 rounded-full mr-4">
+              <div>
+                <h4 class="font-bold">Rudi Hartono</h4>
+                <div class="flex text-yellow-400 mt-1">
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                </div>
+              </div>
+            </div>
+            <p class="text-gray-600">"Awalnya saya ragu untuk membeli ebook digital marketing, tapi setelah mencoba, saya langsung melihat hasilnya. Strategi yang diajarkan sangat praktis dan mudah diaplikasikan."</p>
+          </div>
+        </div>
+        
+        <!-- Timeline Item 2 -->
+        <div class="testimonial-timeline mb-12 pl-8 pb-6 relative">
+          <div class="timeline-date">Maret 2025</div>
+          <div class="bg-white rounded-xl shadow-md p-6">
+            <div class="flex items-center mb-4">
+              <img src="https://randomuser.me/api/portraits/women/45.jpg" class="w-12 h-12 rounded-full mr-4">
+              <div>
+                <h4 class="font-bold">Ani Setiawan</h4>
+                <div class="flex text-yellow-400 mt-1">
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star-half-alt"></i>
+                </div>
+              </div>
+            </div>
+            <p class="text-gray-600">"Template website toko online dari EbookStoreID sangat membantu saya memulai bisnis. Tidak perlu mengeluarkan biaya besar untuk web developer, semua bisa saya kelola sendiri."</p>
+          </div>
+        </div>
+        
+        <!-- Timeline Item 3 -->
+        <div class="testimonial-timeline mb-12 pl-8 pb-6 relative">
+          <div class="timeline-date">Mei 2025</div>
+          <div class="bg-white rounded-xl shadow-md p-6">
+            <div class="flex items-center mb-4">
+              <img src="https://randomuser.me/api/portraits/men/67.jpg" class="w-12 h-12 rounded-full mr-4">
+              <div>
+                <h4 class="font-bold">Hendra Pratama</h4>
+                <div class="flex text-yellow-400 mt-1">
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                </div>
+              </div>
+            </div>
+            <p class="text-gray-600">"Setelah menggunakan paket kombo ebook dan website, omzet bisnis saya naik 300% dalam 3 bulan. Support tim yang sangat membantu saat saya mengalami kesulitan teknis."</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Bagikan Testimoni -->
+  <section class="py-16">
+    <div class="max-w-4xl mx-auto px-4">
+      <div class="testimonial-form p-8 rounded-xl shadow-lg">
+        <div class="text-center mb-8">
+          <h2 class="text-2xl font-bold text-white">Bagikan Pengalaman Anda</h2>
+          <p class="mt-2 text-blue-100">Bantu orang lain dengan berbagi pengalaman Anda menggunakan produk kami</p>
+        </div>
+        
+        <form class="space-y-6">
+          <div>
+            <label class="block text-white mb-2">Nama Lengkap</label>
+            <input type="text" class="form-input w-full p-3 rounded-lg" placeholder="Masukkan nama Anda">
+          </div>
+          
+          <div>
+            <label class="block text-white mb-2">Email</label>
+            <input type="email" class="form-input w-full p-3 rounded-lg" placeholder="Masukkan email Anda">
+          </div>
+          
+          <div>
+            <label class="block text-white mb-2">Produk yang Dibeli</label>
+            <select class="form-input w-full p-3 rounded-lg">
+              <option>Pilih produk yang Anda beli</option>
+              <option>Paket Ebook + Website</option>
+              <option>Ebook Jualan Laris</option>
+              <option>Website Siap Pakai</option>
+              <option>Paket Digital Marketing</option>
+              <option>Template Toko Online</option>
+            </select>
+          </div>
+          
+          <div>
+            <label class="block text-white mb-2">Rating</label>
+            <div class="rating-stars text-2xl space-x-2">
+              <span class="star">★</span>
+              <span class="star">★</span>
+              <span class="star">★</span>
+              <span class="star">★</span>
+              <span class="star">★</span>
+            </div>
+          </div>
+          
+          <div>
+            <label class="block text-white mb-2">Testimoni Anda</label>
+            <textarea class="form-input w-full p-3 rounded-lg" rows="4" placeholder="Bagikan pengalaman Anda menggunakan produk kami"></textarea>
+          </div>
+          
+          <div>
+            <label class="block text-white mb-2">Unggah Foto/Video (Opsional)</label>
+            <div class="border-2 border-dashed border-blue-300 rounded-lg p-6 text-center cursor-pointer">
+              <i class="fas fa-cloud-upload-alt text-3xl text-blue-200 mb-2"></i>
+              <p class="text-blue-200">Klik untuk mengunggah foto atau video testimoni</p>
+              <p class="text-blue-200 text-sm mt-1">Format: JPG, PNG, MP4 (max. 10MB)</p>
+            </div>
+          </div>
+          
+          <button type="submit" class="w-full bg-white hover:bg-gray-100 text-primary font-semibold py-3 rounded-lg transition duration-300">
+            Kirim Testimoni
+          </button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-gray-300 pt-16 pb-8">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <!-- Company Info -->
+        <div>
+          <div class="flex items-center mb-4">
+            <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center mr-3">
+              <i class="fas fa-book text-white text-xl"></i>
+            </div>
+            <h3 class="text-xl font-bold text-white">EbookStore<span class="text-secondary">ID</span></h3>
+          </div>
+          <p class="mb-4">
+            Menyediakan ebook dan website premium untuk membantu Anda sukses di era digital.
+          </p>
+          <div class="flex space-x-4">
+            <a href="#" class="text-gray-400 hover:text-white">
+              <i class="fab fa-facebook-f"></i>
+            </a>
+            <a href="#" class="text-gray-400 hover:text-white">
+              <i class="fab fa-instagram"></i>
+            </a>
+            <a href="#" class="text-gray-400 hover:text-white">
+              <i class="fab fa-youtube"></i>
+            </a>
+            <a href="#" class="text-gray-400 hover:text-white">
+              <i class="fab fa-linkedin-in"></i>
+            </a>
+          </div>
+        </div>
+        
+        <!-- Links -->
+        <div>
+          <h4 class="text-lg font-semibold text-white mb-4">Tautan Cepat</h4>
+          <ul class="space-y-2">
+            <li><a href="#" class="hover:text-white">Tentang Kami</a></li>
+            <li><a href="#" class="hover:text-white">Produk Kami</a></li>
+            <li><a href="#" class="hover:text-white">Blog</a></li>
+            <li><a href="#" class="hover:text-white">Testimoni</a></li>
+            <li><a href="#" class="hover:text-white">Kebijakan Privasi</a></li>
+          </ul>
+        </div>
+        
+        <!-- Products -->
+        <div>
+          <h4 class="text-lg font-semibold text-white mb-4">Produk</h4>
+          <ul class="space-y-2">
+            <li><a href="#" class="hover:text-white">Ebook Bisnis</a></li>
+            <li><a href="#" class="hover:text-white">Website Siap Pakai</a></li>
+            <li><a href="#" class="hover:text-white">Paket Kombo</a></li>
+            <li><a href="#" class="hover:text-white">Template Website</a></li>
+            <li><a href="#" class="hover:text-white">Kursus Online</a></li>
+          </ul>
+        </div>
+        
+         <!-- Contact -->
+         <div id="contact">
+          <h4 class="text-lg font-semibold text-white mb-4">Kontak Kami</h4>
+          <ul class="space-y-3">
+            <li class="flex items-start">
+              <i class="fas fa-map-marker-alt mt-1 mr-3 text-secondary"></i>
+              <span>Jl. kronjo No. 123, tangerang, Indonesia</span>
+            </li>
+            <li class="flex items-center">
+              <i class="fas fa-phone-alt mr-3 text-secondary"></i>
+              <span>+62 83150273295</span>
+            </li>
+            <li class="flex items-center">
+              <i class="fas fa-envelope mr-3 text-secondary"></i>
+              <span>info@ebookstoreid.com</span>
+            </li>
+            <li class="flex items-center">
+              <i class="fab fa-whatsapp mr-3 text-secondary"></i>
+              <span>+62 812 3456 7890</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="border-t border-gray-800 mt-12 pt-8 text-center text-sm">
+        <p>&copy; 2025 Ebook Store Indonesia. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Rating Stars Interaction
+    const stars = document.querySelectorAll('.rating-starts .star');
+    
+    stars.forEach(star => {
+      star.addEventListener('click', function() {
+        const rating = this.getAttribute('data-rating');
+        const container = this.parentElement;
+        
+        // Reset all stars
+        container.querySelectorAll('.star').forEach(s => {
+          s.classList.remove('filled');
+        });
+        
+        // Fill stars up to the clicked one
+        container.querySelectorAll('.star').forEach((s, index) => {
+          if (index < rating) {
+            s.classList.add('filled');
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
